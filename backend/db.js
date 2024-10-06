@@ -1,17 +1,27 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://bichkundesneha:B4N7l1cZ8Ywo6Lod@cluster0.igjna.mongodb.net/todos")
-
-
-// lets create the schema 
-const todoSchema = mongoose.Schema({
-    title: String,
-    description: String,
-    completed: Boolean
+// Connect to MongoDB with error handling
+mongoose.connect("mongodb+srv://bichkundesneha:B4N7l1cZ8Ywo6Lod@cluster0.igjna.mongodb.net/todos", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
+.then(() => {
+    console.log("MongoDB connected successfully");
+})
+.catch(err => {
+    console.error("MongoDB connection error:", err);
+});
 
-const todo = mongoose.model('todos', todoSchema);
+// Define the schema
+const todoSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    completed: { type: Boolean, default: false }
+});
 
-module,exports = {
-    todo: todo
-}
+// Create the model
+const todo = mongoose.model('Todo', todoSchema);
+
+module.exports = {
+    todo
+};
