@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
+const cors = require("cors")
 // importing the types.js
 // import { createToDo, updateToDo } from './types';
 // import {todo} from './db';
 const {createToDo, updateToDo} = require("./types");
 const { todo } = require('./db');
 app.use(express.json()); // middleware 
+app.use(cors());
+
+
 
 // we better validate that the user s sending the correct information 
 /*

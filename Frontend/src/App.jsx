@@ -1,18 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { CreateToDo } from './components/CreateToDo'
-import { ToDos } from './components/ToDos'
+import { useState, useEffect } from 'react';
+import { CreateToDo } from './components/CreateToDo';
+import { ToDos } from './components/ToDos';
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+
+  // Fetching todos from the backend when the component mounts
+  useEffect(() => {
+    fetch("http://localhost:3000/todos")
+      .then(async function(res) {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const json = await res.json();
+        setTodos(json.todos);  // Properly update todos
+      })
+      .catch(function(error) {
+        console.error('Fetch operation failed:', error);
+      });
+  }, []);  // Empty array means this will run once when the component mounts
 
   return (
     <div>
-      <CreateToDo></CreateToDo>
-      <ToDos></ToDos>
+      <CreateToDo setTodos={setTodos} />  {/* Pass setTodos as a prop */}
+      <ToDos todos={todos} />  {/* Pass todos to ToDos */}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
